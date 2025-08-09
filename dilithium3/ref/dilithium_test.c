@@ -82,31 +82,31 @@ static int test_sign(void)
     ret = crypto_sign_open(m2, &mlen, sm, smlen, ctx, CTXLEN, pk); //verify signed message
 
     if(ret) {
-    Ifx_Console_print("Verification failed at iteration %zu\n", i);
-    Ifx_Console_print("siglen = %zu, smlen = %zu, mlen = %zu\n", siglen, smlen, mlen);
-    Ifx_Console_print("sig = ");
+    printf("Verification failed at iteration %zu\n", i);
+    printf("siglen = %zu, smlen = %zu, mlen = %zu\n", siglen, smlen, mlen);
+    printf("sig = ");
     for (size_t k = 0; k < siglen; ++k) {
-        Ifx_Console_print("%02x ", sig[k]);
+        printf("%02x ", sig[k]);
     }
-    Ifx_Console_print("\n");
-    Ifx_Console_print("m = ");
+    printf("\n");
+    printf("m = ");
     for (size_t k = 0; k < MLEN; ++k) {
-        Ifx_Console_print("%02x ", m[k]);
+        printf("%02x ", m[k]);
     }
-    Ifx_Console_print("\n");
+    printf("\n");
     return -1;
     }
     if(smlen != MLEN + CRYPTO_BYTES) {
-    Ifx_Console_print("Signed message lengths wrong\n");
+    printf("Signed message lengths wrong\n");
     return -1;
     }
     if(mlen != MLEN) {
-    Ifx_Console_print("Message lengths wrong\n");
+    printf("Message lengths wrong\n");
     return -1;
     }
     for(j = 0; j < MLEN; ++j) {
     if(m2[j] != m[j]) {
-        Ifx_Console_print("Messages don't match\n");
+        printf("Messages don't match\n");
         return -1;
     }
     }
@@ -118,7 +118,7 @@ static int test_sign(void)
     sm[j % (MLEN + CRYPTO_BYTES)] += b;
     ret = crypto_sign_open(m2, &mlen, sm, smlen, ctx, CTXLEN, pk);
     if(!ret) {
-    Ifx_Console_print("Trivial forgeries possible\n");
+    printf("Trivial forgeries possible\n");
     return -1;
     }
 
@@ -128,14 +128,14 @@ static int test_sign(void)
     /* Print average time for each operation */
     if (NTESTS > 0) {
         keygen_time_avg = keygen_time / NTESTS; // Calculate average after the loop
-        Ifx_Console_print("\nAverage time taken to generate keypair = %f", keygen_time_avg);
+        printf("\nAverage time taken to generate keypair = %f", keygen_time_avg);
         sign_time_avg = sign_time / NTESTS; // Calculate average after the loop
-        Ifx_Console_print("\nAverage time taken to sign message = %f", sign_time_avg);
+        printf("\nAverage time taken to sign message = %f", sign_time_avg);
         verify_time_avg = verify_time / NTESTS;
-        Ifx_Console_print("\nAverage time taken to verify message = %f", verify_time_avg);
+        printf("\nAverage time taken to verify message = %f", verify_time_avg);
     } 
     else {
-        Ifx_Console_print("\nError: NTESTS is zero, cannot calculate average time for keypair generation.");
+        printf("\nError: NTESTS is zero, cannot calculate average time for keypair generation.");
     }
 
     return 0;

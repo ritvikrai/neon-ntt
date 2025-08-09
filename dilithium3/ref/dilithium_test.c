@@ -39,6 +39,9 @@
 #define MLEN 59
 #define CTXLEN 14
 
+double keygen_time = 0, sign_time = 0, verify_time = 0;
+double keygen_time_avg = 0, sign_time_avg = 0, verify_time_avg = 0;
+
 static int test_sign(void)
 {
     size_t i, j;
@@ -53,10 +56,6 @@ static int test_sign(void)
     uint8_t sk[CRYPTO_SECRETKEYBYTES];
     uint8_t sig[CRYPTO_BYTES];
     clock_t start_time, end_time;
-    double keygen_time = 0, sign_time = 0, verify_time = 0;
-    double keygen_time_avg, sign_time_avg, verify_time_avg;
-
-
 
     //MESSAGE GENERATION
     randombytes(m, MLEN);
@@ -124,20 +123,6 @@ static int test_sign(void)
 
     end_time=clock();
     verify_time += ((double)(end_time-start_time))/CLOCKS_PER_SEC;
-
-    /* Print average time for each operation */
-    if (NTESTS > 0) {
-        keygen_time_avg = keygen_time / NTESTS; // Calculate average after the loop
-        printf("\nAverage time taken to generate keypair = %f", keygen_time_avg);
-        sign_time_avg = sign_time / NTESTS; // Calculate average after the loop
-        printf("\nAverage time taken to sign message = %f", sign_time_avg);
-        verify_time_avg = verify_time / NTESTS;
-        printf("\nAverage time taken to verify message = %f", verify_time_avg);
-    } 
-    else {
-        printf("\nError: NTESTS is zero, cannot calculate average time for keypair generation.");
-    }
-
     return 0;
 }
 
@@ -184,8 +169,16 @@ int main(void)
   printf("CRYPTO_SECRETKEYBYTES:  %d\n",CRYPTO_SECRETKEYBYTES);
   printf("CRYPTO_PUBLICKEYBYTES:  %d\n",CRYPTO_PUBLICKEYBYTES);
   printf("CRYPTO_BYTES:  %d\n",CRYPTO_BYTES);
-  printf("Test successful\n");
 
+  /* Print average time for each operation */
+  keygen_time_avg = keygen_time / NTESTS; // Calculate average after the loop
+  printf("\nAverage time taken to generate keypair = %f", keygen_time_avg);
+  sign_time_avg = sign_time / NTESTS; // Calculate average after the loop
+  printf("\nAverage time taken to sign message = %f", sign_time_avg);
+  verify_time_avg = verify_time / NTESTS;
+  printf("\nAverage time taken to verify message = %f", verify_time_avg);
+
+  printf("Test successful\n");
   return 0;
 }
 
